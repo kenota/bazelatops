@@ -19,3 +19,15 @@ with monorepo and different modern frameworks
 * `bazel build "//web/teapotstore:package"` - build a production version of teapotstore frontend
 
 You can see the rebuild of dependencies by bazel in action. Run `prodserver` once, and on each subsequent run it will be much faster since bazel is not rebuilding anything. Then stop it, make change in any of `web/teapotstore/src/*` files and run `prodserver` again. This time bazel will rebuild the `//web/teapotstore:package` artifact because of a source code file change.
+
+
+## Additional notes and gotchas
+
+### vue-cli
+
+Vue CLI seems is not playing well with bazel. Vue-cli does not expect a project it is trying to build to be anywhere except current folder:
+
+* [This issue on bazel talk about problem and workarounds](https://github.com/bazelbuild/rules_nodejs/issues/1840)
+* [There is a workaround called vue-cli-launcher](https://www.npmjs.com/package/vue-cli-launcher#bazel)
+* [Issue for vew-cli exist, but with no action](https://github.com/vuejs/vue-cli/issues/3150)
+* [🍒 on top - you can not eject vue-cli from a project](https://github.com/vuejs/vue-cli/issues/2796)
