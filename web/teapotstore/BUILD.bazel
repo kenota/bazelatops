@@ -1,0 +1,32 @@
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@npm//@vue/cli-service:index.bzl", "vue_cli_service")
+
+write_file(
+    name = "write_chdir_script",
+    out = "chdir.js",
+    content = ["process.chdir(__dirname)"],
+)
+
+
+vue_cli_service(
+    name = "serve",
+    args = ["serve", "--node_options=--require=./$(rootpath chdir.js)"],
+    data = [
+        "babel.config.js",
+        "//web:package.json",
+        "src",
+        "chdir.js",
+    ],
+)
+
+
+vue_cli_service(
+    name = "build",
+    args = ["build", "--node_options=--require=./$(rootpath chdir.js)"],
+    data = [
+        "babel.config.js",
+        "//web:package.json",
+        "src",
+        "chdir.js",
+    ],
+)
