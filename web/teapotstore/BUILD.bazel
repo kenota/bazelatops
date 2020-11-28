@@ -1,26 +1,11 @@
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@npm//@vue/cli-service:index.bzl", "vue_cli_service")
-load("@npm//vue-cli-launcher:index.bzl", "vue_cli_launcher")
-load("@npm//http-server:index.bzl", "http_server")
+load("@teapotstore_npm//@vue/cli-service:index.bzl", "vue_cli_service")
+load("@teapotstore_npm//vue-cli-launcher:index.bzl", "vue_cli_launcher")
+load("@teapotstore_npm//http-server:index.bzl", "http_server")
 
-
-
-write_file(
-    name = "write_chdir_script",
-    out = "chdir.js",
-    content = ["process.chdir(__dirname)"],
-)
-
-
-vue_cli_service(
-    name = "serve",
-    args = ["serve", "--node_options=--require=./$(rootpath chdir.js)"],
-    data = [
-        "babel.config.js",
-        "//web:package.json",
-        "src",
-        "chdir.js",
-    ],
+filegroup(
+    name = "src_new",
+    srcs = glob(["*.vue", "*.js", "**/**"]),
 )
 
 vue_cli_launcher(
@@ -29,15 +14,18 @@ vue_cli_launcher(
     "build",
     "--dest=$(@D)",
     "--resolve-dest-by-cwd",
-    "--package-json-path=$(execpath babel.config.js)",
+    "--package-json-path=$(execpath package.json)",
   ],
   data = [
+    "package.json",
     "babel.config.js",
-    "src",
-    "@npm//vue",
-    "@npm//@vue/cli-plugin-babel",
+    "//web/teapotstore/src",
+    "@teapotstore_npm//vue",
+    "@teapotstore_npm//eslint-plugin-vue",
+    "@teapotstore_npm//babel-eslint",
+    "@teapotstore_npm//@vue/cli-plugin-babel",
     # Shouldn't be needed since it's in skip-plugins ?
-    "@npm//@vue/cli-plugin-eslint",
+    "@teapotstore_npm//@vue/cli-plugin-eslint",
   ],
   output_dir = True,
 )

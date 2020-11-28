@@ -3,7 +3,7 @@ workspace(
     name = "bazelatops",
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
-    managed_directories = {"@npm": ["web/node_modules"]},
+    managed_directories = {"@teapotstore_npm": ["web/teapotstore/node_modules"]},
 )
 
 # Install the nodejs "bootstrap" package
@@ -18,14 +18,16 @@ http_archive(
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.
 load("@build_bazel_rules_nodejs//:index.bzl", "npm_install", "node_repositories")
+node_repositories()
+
 npm_install(
     # Name this npm so that Bazel Label references look like @npm//package
-    name = "npm",
-    package_json = "//web:package.json",
-    package_lock_json = "//web:package-lock.json",
+    name = "teapotstore_npm",
+    package_json = "//web/teapotstore:package.json",
+    package_lock_json = "//web/teapotstore:package-lock.json",
 )
 
-node_repositories(package_json = ["//web:package.json"])
+
 
 
 http_archive(
@@ -36,5 +38,6 @@ http_archive(
     ],
     sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
 )
+
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 bazel_skylib_workspace()
