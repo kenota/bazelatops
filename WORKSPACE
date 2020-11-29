@@ -28,73 +28,31 @@ npm_install(
 )
 
 
-
-
-
-
-# GRPC and Protobuf required rules
+# GoLang & Bazelle
+# v0.24.7 of rules_go uses Go 1.15.5
 http_archive(
-    name = "build_stack_rules_proto",
-    urls = ["https://github.com/stackb/rules_proto/archive/b2913e6340bcbffb46793045ecac928dcf1b34a5.tar.gz"],
-    sha256 = "d456a22a6a8d577499440e8408fc64396486291b570963f7b157f775be11823e",
-    strip_prefix = "rules_proto-b2913e6340bcbffb46793045ecac928dcf1b34a5",
-)
-
-load("@build_stack_rules_proto//github.com/grpc/grpc-web:deps.bzl", "ts_grpc_compile")
-ts_grpc_compile()
-
-load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
-
-closure_repositories(
-    omit_com_google_protobuf = True,
+    name = "io_bazel_rules_go",
+    sha256 = "207fad3e6689135c5d8713e5a17ba9d1290238f47b9ba545b63d9303406209c6",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v0.24.7/rules_go-v0.24.7.tar.gz",
+        "https://github.com/bazelbuild/rules_go/releases/download/v0.24.7/rules_go-v0.24.7.tar.gz",
+    ],
 )
 
 http_archive(
-    name = "com_google_googleapis",
-    sha256 = "fe3e2be98dfb247556ed864f781dac3464b029ba6e6cf0ac94a6862bcabe8fa2",
-    strip_prefix = "googleapis-df4fd38d040c5c8a0869936205bca13fb64b2cff",
-    url = "https://github.com/googleapis/googleapis/archive/df4fd38d040c5c8a0869936205bca13fb64b2cff.zip",
+    name = "bazel_gazelle",
+    sha256 = "b85f48fa105c4403326e9525ad2b2cc437babaa6e15a3fc0b1dbab0ab064bc7c",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.2/bazel-gazelle-v0.22.2.tar.gz",
+        "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.22.2/bazel-gazelle-v0.22.2.tar.gz",
+    ],
 )
-
-load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
-switched_rules_by_language(
-    name = "com_google_googleapis_imports",
-    grpc = True,
-)
-
-#### GRPC-Gateway setup  #####
-load("@build_stack_rules_proto//:deps.bzl", "bazel_gazelle", "io_bazel_rules_go")
-
-io_bazel_rules_go()
 
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
 go_rules_dependencies()
 
 go_register_toolchains()
 
-bazel_gazelle()
-
-load("@build_stack_rules_proto//github.com/grpc-ecosystem/grpc-gateway:deps.bzl", "gateway_grpc_compile")
-
-gateway_grpc_compile()
-
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-
 gazelle_dependencies()
-
-
-# ### OpenAPI/Swagger codegen
-
-# RULES_OPEN_API_VERSION = "f0f42afb855139ad5346659d089c32fb756d068e"
-# RULES_OPEN_API_SHA256 = "9570186948f1f65c61d2c6c6006840ea70888b270f028bbd0eb736caae1cd9df"
-
-# http_archive(
-#     name = "io_bazel_rules_openapi",
-#     strip_prefix = "rules_openapi-%s" % RULES_OPEN_API_VERSION,
-#     url = "https://github.com/meetup/rules_openapi/archive/%s.tar.gz" % RULES_OPEN_API_VERSION,
-#     sha256 = RULES_OPEN_API_SHA256
-# )
-
-# load("@io_bazel_rules_openapi//openapi:openapi.bzl", "openapi_repositories")
-# openapi_repositories()
