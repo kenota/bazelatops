@@ -56,3 +56,32 @@ go_rules_dependencies()
 go_register_toolchains()
 
 gazelle_dependencies()
+
+
+# Rules GRPC
+# 1. Generic rules_grpc deps:
+
+
+http_archive(
+    name = "rules_proto_grpc",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/2.0.0.tar.gz"],
+    sha256 = "d771584bbff98698e7cb3cb31c132ee206a972569f4dc8b65acbdd934d156b33",
+    strip_prefix = "rules_proto_grpc-2.0.0",
+)
+
+load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_toolchains", "rules_proto_grpc_repos", "io_bazel_rules_go", "bazel_gazelle")
+rules_proto_grpc_toolchains()
+rules_proto_grpc_repos()
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+rules_proto_dependencies()
+rules_proto_toolchains()
+
+# 2. GRPC-go specific rules_grpc rules:
+
+io_bazel_rules_go()
+bazel_gazelle()
+
+load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos="go_repos")
+
+rules_proto_grpc_go_repos()
