@@ -5,34 +5,37 @@ load("@teapotstore_npm//http-server:index.bzl", "http_server")
 
 filegroup(
     name = "src_new",
-    srcs = glob(["*.vue", "*.js", "**/**"]),
+    srcs = glob([
+        "*.vue",
+        "*.js",
+        "**/**",
+    ]),
 )
 
 vue_cli_launcher(
-  name = "package",
-  args = [
-    "build",
-    "--dest=$(@D)",
-    "--resolve-dest-by-cwd",
-    "--package-json-path=$(execpath package.json)",
-  ],
-  data = [
-    "package.json",
-    "babel.config.js",
-    "//web/teapotstore/src",
-    "@teapotstore_npm//vue",
-    "@teapotstore_npm//eslint-plugin-vue",
-    "@teapotstore_npm//babel-eslint",
-    "@teapotstore_npm//@vue/cli-plugin-babel",
-    # Shouldn't be needed since it's in skip-plugins ?
-    "@teapotstore_npm//@vue/cli-plugin-eslint",
-  ],
-  output_dir = True,
+    name = "package",
+    args = [
+        "build",
+        "--dest=$(@D)",
+        "--resolve-dest-by-cwd",
+        "--package-json-path=$(execpath package.json)",
+    ],
+    data = [
+        "package.json",
+        "babel.config.js",
+        "//web/teapotstore/src",
+        "@teapotstore_npm//vue",
+        "@teapotstore_npm//eslint-plugin-vue",
+        "@teapotstore_npm//babel-eslint",
+        "@teapotstore_npm//@vue/cli-plugin-babel",
+        # Shouldn't be needed since it's in skip-plugins ?
+        "@teapotstore_npm//@vue/cli-plugin-eslint",
+    ],
+    output_dir = True,
 )
 
-
 http_server(
-    name="prodserver",
+    name = "prodserver",
     data = [":package"],
     templated_args = ["web/teapotstore/package/"],
 )
