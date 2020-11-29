@@ -1,0 +1,47 @@
+/**
+ * This file contains the protobuf based definition of TeatpotService and related
+ * data models
+ * Loosely based on Google api guidelines and designed to be the backbone of grpc based api.
+ */
+
+syntax = "proto3";
+
+package bazelatops.teapotstore.v1;
+
+/* Annotations from google api allows mapping specific GRPC service calls to urls.
+ * GRPC-web gateway will set up specific handlers based on these annotations
+ */
+import "google/api/annotations.proto";
+
+/**
+ * Teapot describes teapot as known in the system
+ */
+message Teapot {
+    string name = 1;
+    int32 capacity_ml = 2;
+}
+
+/**
+ * The request is empty. We have separate request type to be able
+ * extend the api in the future. You can add new fields to message in backward-comaptible
+ * way, but you can not add new parameter to rpc call
+ */
+message ListTeapotsRequest {
+
+}
+
+
+message ListTeapotsResponse {
+    repeated Teapot teapots = 1;
+}
+
+service TeapotService {
+    /**
+     * Returns a list of known teapots
+     */
+    rpc ListTeapots(ListTeapotsRequest) returns (ListTeapotsResponse) {
+        option (google.api.http) = {
+          get : "/services/teapotstore/v1/teapots"
+        };
+    }
+}
