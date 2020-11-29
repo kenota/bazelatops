@@ -1,7 +1,35 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 
 proto_library(
     name = "teapotstore_proto",
     srcs = ["teapotstore.proto"],
-    deps = ["@com_google_protobuf//:any_proto", "@com_google_googleapis//google/api:annotations_proto"],
+    deps = [
+        "@com_google_protobuf//:any_proto",
+        "@com_google_googleapis//google/api:annotations_proto",
+    ],
+)
+
+proto_library(
+    name = "bazelatops_teapotstore_v1_proto",
+    srcs = ["teapotstore.proto"],
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_proto"],
+)
+
+go_proto_library(
+    name = "bazelatops_teapotstore_v1_go_proto",
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    importpath = "proto/teapotstore/v1",
+    proto = ":bazelatops_teapotstore_v1_proto",
+    visibility = ["//visibility:public"],
+    deps = ["@go_googleapis//google/api:annotations_go_proto"],
+)
+
+go_library(
+    name = "go_default_library",
+    embed = [":bazelatops_teapotstore_v1_go_proto"],
+    importpath = "proto/teapotstore/v1",
+    visibility = ["//visibility:public"],
 )
