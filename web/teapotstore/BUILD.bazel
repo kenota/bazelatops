@@ -1,5 +1,3 @@
-load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("@teapotstore_npm//@vue/cli-service:index.bzl", "vue_cli_service")
 load("@teapotstore_npm//vue-cli-launcher:index.bzl", "vue_cli_launcher")
 load("@teapotstore_npm//http-server:index.bzl", "http_server")
 
