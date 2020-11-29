@@ -6,8 +6,8 @@ proto_library(
     name = "teapotstore_proto",
     srcs = ["teapotstore.proto"],
     deps = [
-        "@com_google_protobuf//:any_proto",
         "@com_google_googleapis//google/api:annotations_proto",
+        "@com_google_protobuf//:any_proto",
     ],
 )
 
@@ -28,7 +28,7 @@ go_proto_library(
 )
 
 go_library(
-    name = "go_default_library",
+    name = "teapotstore",
     embed = [":bazelatops_teapotstore_v1_go_proto"],
     importpath = "proto/teapotstore/v1",
     visibility = ["//visibility:public"],
