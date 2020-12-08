@@ -85,3 +85,11 @@ bazel_gazelle()
 load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos="go_repos")
 
 rules_proto_grpc_go_repos()
+
+load("@rules_proto_grpc//github.com/grpc-ecosystem/grpc-gateway:repositories.bzl", rules_proto_grpc_gateway_repos="gateway_repos")
+
+rules_proto_grpc_gateway_repos()
+
+load("@grpc_ecosystem_grpc_gateway//:repositories.bzl", "go_repositories")
+
+go_repositories()
